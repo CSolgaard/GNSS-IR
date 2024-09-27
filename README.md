@@ -1,6 +1,4 @@
-# Markdown syntax guide
-
-## Automatication of GNSS-IR Estimation of Tide in Greenland. 
+# Automatication of GNSS-IR Estimation of Tide in Greenland. 
 
 This project focuses on calculating reflector heights of GNSS stations in Greenland, which are used for tide estimations. The GNSS stations used in this project are primarily part of the **GNET (Greenland GNSS Network)**, a project maintained by **DTU SPACE** and **Klima Data Styrelsen (KDS)**.
 
