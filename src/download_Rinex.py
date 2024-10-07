@@ -6,7 +6,7 @@ import os
 # SSH details
 REMOTE_HOST = "10.58.1.129"
 REMOTE_USER = "csol"
-PASSWORD = "Csolgaard1998!"
+PASSWORD = "XXXX"
 REMOTE_PATH = "/data/rinex3/obs/"
 LOCAL_PATH = "/mnt/c/Users/csol/GNSS_IR/src/TEMP_RINEX_DATA/"
 
