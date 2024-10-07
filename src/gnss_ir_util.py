@@ -82,7 +82,6 @@ def xyz2llhd(xyz):
         i+=1
     return lat*180/np.pi, lon*180/np.pi, h
 
-
 def extract_approx_xyz_from_rinex_file(file_path):
     with open(file_path, 'r') as rinex_file:
         header_lines = []
@@ -131,30 +130,7 @@ def create_gnssir_input_class(lat, lon, height, e1, e2, h1, h2, nr1, nr2, peak2n
 
     return gnssir_input_class(lat=lat, lon=lon, height=height, e1=e1, e2=e2, h1=h1, h2=h2, nr1=nr1, nr2=nr2, peak2noise=peak2noise, ampl=ampl, frlist=frlist, azlist2=azlist2)
 
-
 def create_json(station_id, lat, lon, height, input_orig):
-    # @dataclass
-    # class gnssir_input_class:
-    #     lat: str
-    #     lon: str
-    #     height: str
-    #     e1: str
-    #     e2: str
-    #     h1: str
-    #     h2: str 
-    #     nr1: str 
-    #     nr2: str 
-    #     peak2noise: str
-    #     ampl: str 
-    #     frlist: str 
-    #     azlist2: str
-
-    # input_orig = gnssir_input_class(lat=lat, lon=lon, height=height, 
-    #                                 e1=2, e2=12, h1=4.0, h2=15.0, nr1=4.0, 
-    #                                 nr2=15.0, peak2noise=2.7, ampl=6.0, 
-    #                                 frlist="1 20 5 101 102 201 205 206 207 302 306", 
-    #                                 azlist2 = "150 250")
-    
     gnssir_input_dict = asdict(input_orig)
 
     print("...")
@@ -171,3 +147,53 @@ def run_gnssIR(station_id, year, doy):
     gnssir_command = f"gnssir {station_id} {year} {doy} -snr 66"
     subprocess.run(gnssir_command, check=True, shell=True)
     return
+
+
+def get_doy_range(directory):
+    """
+    Get the range of DOY (Day of Year) for RINEX2 files in the specified directory.
+    
+    Args:
+    - directory (str): Path to the directory containing RINEX2 files.
+    
+    Returns:
+    - tuple: (station_id, year, (start_doy, end_doy))
+             station_id (str): Station ID extracted from the filenames.
+             year (int): Two-digit year extracted from the filenames.
+             start_doy (int): Starting Day of Year.
+             end_doy (int): Ending Day of Year.
+    """
+    # Regular expression to match the RINEX2 filename convention:
+    # {station_id}{doy}0.{year}O
+    pattern = re.compile(r"^([a-zA-Z0-9]{4})(\d{3})0\.(\d{2})o$")
+
+    doy_list = []
+    station_id = None
+    year = None
+
+    # Iterate through files in the specified directory
+    for filename in os.listdir(directory):
+        match = pattern.match(filename)
+        if match:
+            station_id = match.group(1)  # Extract the station ID
+            doy = int(match.group(2))    # Extract the Day of Year (DOY)
+            year = int(match.group(3))+2000   # Extract the year (2 digits)
+            doy_list.append(doy)         # Append only DOY since the year is the same
+    # If there are no matching files, return None
+    if not doy_list:
+        return None, None, None
+
+    # Determine the start and end DOY
+    start_doy = min(doy_list)
+    end_doy = max(doy_list)
+    return station_id, year, (start_doy, end_doy)
+
+def count_nr_cores(): 
+    n_cores = os.cpu_count()
+    if n_cores > 10: 
+        n_cores = 10
+        return n_cores
+    else: 
+        return n_cores
+
+

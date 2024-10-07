@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Initialize conda
-source /home/csol/anaconda3/etc/profile.d/conda.sh
+source /home/csol/anaconda3/etc/profile.d/conda.sh      # Change so that all can run
 
 # Activate virtual environment
 conda activate gnssIR
@@ -24,7 +24,7 @@ STATION_ID=$(cat /tmp/station_id.txt)
 # ----------------------------------------------------------------
 
 # Directory containing the Python script. 
-SCRIPT_DIR="/mnt/c/Users/csol/GNSS_IR/src"
+SCRIPT_DIR="/mnt/c/Users/csol/GNSS_IR/src"        # Change to relative
 
 # Change to the script directory 
 cd "$SCRIPT_DIR"
@@ -52,6 +52,6 @@ python "$PYTHON_SCRIPT"
 conda deactivate 
 
 # Remove the temp directory for Rinex3 data. 
-rm -rf "/mnt/c/Users/csol/GNSS_IR/src/TEMP_RINEX_DATA"
+rm -rf "/mnt/c/Users/csol/GNSS_IR/src/TEMP_RINEX_DATA"        # Change to relative
 
 echo ">>  Done processing GNSS-IR for '$STATION_ID'"
